@@ -1,0 +1,10 @@
+# Additional requirements for the CI pipeline
+#
+# We use green to run the tests, mypy for strict typing, ruff to lint and format the code.
+#
+
+-r requirements.txt
+
+green>=4.0.1
+mypy>=1.11.1
+ruff>=0.6.2

@@ -1,0 +1,7 @@
+# Additional requirements for the CI pipeline
+#
+# We use the pre-commit framework to ensure commits are linted.
+
+-r requirements-ci.txt
+
+pre-commit>=3.8.0

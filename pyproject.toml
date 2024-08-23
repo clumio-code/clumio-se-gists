@@ -1,0 +1,71 @@
+# Copyright 2023. Clumio, Inc.
+
+
+[project]
+name='clumio-se-gists'
+# Update this version in sync with the release version when releasing.
+# The first commit after a release should add `-post` to the version so that
+# there is no confusion that the locally installed version is not an official release.
+version='0..0.0-alpha'
+description='Clumio Examples and gists.'
+requires-python = '>=3.12'
+dynamic = ["dependencies", "optional-dependencies"]
+
+
+[tool.setuptools.dynamic]
+dependencies = { file = ['requirements.txt'] }
+optional-dependencies.dev = { file = ['requirements-dev.txt'] }
+
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".github",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    "vendor",
+]
+target-version = "py312"
+line-length = 100
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["D", "I", "E", "F", "W"]
+
+[tool.ruff.lint.per-file-ignores]
+"*/test/test_*" = ["D"]
+"*/__init__.py" = ["D104"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+# Use single quotes for strings.
+quote-style = "single"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

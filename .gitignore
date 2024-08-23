@@ -1,0 +1,9 @@
+clumio/
+**/*.egg-info/*
+**/__pycache__/*
+.coverage
+.idea/
+.scannerwork/
+build/
+dist/
+
