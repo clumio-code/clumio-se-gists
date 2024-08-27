@@ -122,7 +122,7 @@ def main(argv: Sequence[str]) -> int:
     parser.add_argument('--region', required=True, help='AWS region, e.g. us-west-2')
     parser.add_argument('--tables', nargs='*', help='Specific table names to get metrics for')
     parser.add_argument('--output', default='dynamodb_metrics.csv', help='Output CSV file path')
-    args = parser.parse_args()
+    args = parser.parse_args(argv[1:])
 
     session = boto3.Session(region_name=args.region)
     dynamodb = session.resource('dynamodb')
