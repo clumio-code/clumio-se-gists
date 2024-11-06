@@ -63,6 +63,9 @@ def get_table_metrics(
         table_item_count = table.item_count
         table_avg_item_size_bytes = table_size_bytes / table_item_count if table_item_count else 0
 
+        table_gsi_count = len(table.global_secondary_indexes or [])
+        table_lsi_count = len(table.local_secondary_indexes or [])
+
         end_time = datetime.datetime.now(datetime.timezone.utc)
         start_time = end_time - datetime.timedelta(days=DATA_PERIOD_IN_DAYS)
 
@@ -107,6 +110,8 @@ def get_table_metrics(
             'AvgDailyWCU': table_avg_daily_wcu,
             'AvgDailyChangeRate': f'{table_avg_daily_change_rate_percent:.2f}%',
             'AvgDailyChangeBytes': size_based_on_avg_daily_wcu,
+            'GlobalSecondaryIndexCount': table_gsi_count,
+            'LocalSecondaryIndexCount': table_lsi_count,
         }
 
     except botocore.exceptions.ClientError as error:
@@ -140,6 +145,8 @@ def main(argv: Sequence[str]) -> int:
             'AvgDailyWCU',
             'AvgDailyChangeRate',
             'AvgDailyChangeBytes',
+            'GlobalSecondaryIndexCount',
+            'LocalSecondaryIndexCount',
         ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
