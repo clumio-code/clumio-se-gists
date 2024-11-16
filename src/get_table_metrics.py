@@ -66,6 +66,16 @@ def get_table_metrics(
         table_gsi_count = len(table.global_secondary_indexes or [])
         table_lsi_count = len(table.local_secondary_indexes or [])
 
+        # Check if streams are enabled for the table
+        stream_spec = table.stream_specification or {}
+        table_streams_enabled = stream_spec.get('StreamEnabled', False)
+
+        # Check if PITR is enabled for the table
+        response = table.meta.client.describe_continuous_backups(TableName=table_name)
+        cont_backups_desc = response.get('ContinuousBackupsDescription', {})
+        pitr_desc = cont_backups_desc.get('PointInTimeRecoveryDescription', {})
+        table_pitr_enabled = pitr_desc.get('PointInTimeRecoveryStatus', '') == 'ENABLED'
+
         end_time = datetime.datetime.now(datetime.timezone.utc)
         start_time = end_time - datetime.timedelta(days=DATA_PERIOD_IN_DAYS)
 
@@ -112,6 +122,8 @@ def get_table_metrics(
             'AvgDailyChangeBytes': size_based_on_avg_daily_wcu,
             'GlobalSecondaryIndexCount': table_gsi_count,
             'LocalSecondaryIndexCount': table_lsi_count,
+            'StreamsEnabled': table_streams_enabled,
+            'PITREnabled': table_pitr_enabled,
         }
 
     except botocore.exceptions.ClientError as error:
@@ -147,6 +159,8 @@ def main(argv: Sequence[str]) -> int:
             'AvgDailyChangeBytes',
             'GlobalSecondaryIndexCount',
             'LocalSecondaryIndexCount',
+            'StreamsEnabled',
+            'PITREnabled',
         ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
